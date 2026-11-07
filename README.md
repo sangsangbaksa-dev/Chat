@@ -2,6 +2,11 @@
 
 구글챗 스타일 채팅 PWA. Vite + React + Supabase, Vercel 배포.
 
+## 현재 배포
+- 사이트: https://waldochat-waldo5.vercel.app (Vercel 프로젝트 `waldochat`, 빌드 루트 `web/`)
+- Supabase 프로젝트: `waldochat-v2` (`vyzwxjnfppqmeznbzsnb`, 서울)
+- 기존 `WaldoChat` Supabase 프로젝트와 Vercel `waldo-chat`은 사용하지 않는다(건드리지 않음).
+
 ## 구조
 - `web/` — 프런트엔드 (PWA)
 - `supabase/migrations/` — DB 스키마 (프로필, 계정 중복 방지, 푸시 구독)
