@@ -99,7 +99,7 @@ test('이미지 첨부: 보내기, 상대에게 표시, 확대', async ({ browse
   await A.page.getByTestId('file-input').setInputFiles(png)
   await expect(A.page.getByAltText('보낼 사진 미리보기')).toBeVisible()
   await A.page.getByRole('button', { name: '보내기' }).click()
-  await expect(A.page.locator('.msg .att img')).toBeVisible({ timeout: 15_000 })
+  await expect(A.page.locator('.msg .att img').last()).toBeVisible({ timeout: 15_000 })
   await expect(B.page.locator('.msg .att img').last()).toBeVisible({ timeout: 15_000 })
   await expect.poll(() => B.page.locator('.msg .att img').last().evaluate((i: HTMLImageElement) => i.naturalWidth)).toBeGreaterThan(0)
   await B.page.locator('.msg .att').last().click()

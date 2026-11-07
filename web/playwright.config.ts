@@ -7,9 +7,9 @@ export default defineConfig({
   testDir: './e2e',
   timeout: 60_000,
   workers: 1,
-  use: { baseURL: 'http://localhost:4173', trace: 'off', launchOptions: exe },
+  use: { baseURL: process.env.E2E_BASE_URL ?? 'http://localhost:4173', trace: 'off', launchOptions: exe },
   projects: [{ name: 'desktop', use: { ...devices['Desktop Chrome'], launchOptions: exe } }],
-  webServer: {
+  webServer: process.env.E2E_BASE_URL ? undefined : {
     command: 'npm run build && npx vite preview --port 4173 --strictPort',
     url: 'http://localhost:4173',
     reuseExistingServer: true,
