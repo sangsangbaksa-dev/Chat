@@ -9,5 +9,5 @@ export const isConfigured = Boolean(url && key)
 export const supabase = createClient(
   url ?? 'https://placeholder.supabase.co',
   key ?? 'placeholder-key',
-  { auth: { flowType: 'pkce', persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } },
+  { auth: { flowType: 'implicit', persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } },
 )

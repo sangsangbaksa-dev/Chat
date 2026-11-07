@@ -26,13 +26,18 @@ self.addEventListener('push', (event) => {
     data = { body: event.data?.text() }
   }
   event.waitUntil(
-    self.registration.showNotification(data.title ?? '왈도쳇', {
-      body: data.body ?? '',
-      icon: '/icon-192.png',
-      badge: '/icon-192.png',
-      tag: data.tag,
-      data: { url: data.url ?? '/' },
-    }),
+    (async () => {
+      // 앱이 화면에 떠 있으면 앱 안의 알림(토스트·배지)이 대신하므로 시스템 알림은 생략한다.
+      const wins = await self.clients.matchAll({ type: 'window', includeUncontrolled: true })
+      if (wins.some((c) => c.visibilityState === 'visible' && c.focused)) return
+      await self.registration.showNotification(data.title ?? '왈도쳇', {
+        body: data.body ?? '',
+        icon: '/icon-192.png',
+        badge: '/icon-192.png',
+        tag: data.tag,
+        data: { url: data.url ?? '/' },
+      })
+    })(),
   )
 })
 
@@ -40,14 +45,14 @@ self.addEventListener('notificationclick', (event) => {
   event.notification.close()
   const url: string = event.notification.data?.url ?? '/'
   event.waitUntil(
-    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
-      for (const c of list) {
-        if ('focus' in c) {
-          c.navigate(url).catch(() => undefined)
-          return c.focus()
-        }
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(async (list) => {
+      const c = list[0]
+      if (c && 'focus' in c) {
+        await c.focus()
+        c.postMessage({ type: 'navigate', url })
+        return
       }
-      return self.clients.openWindow(url)
+      await self.clients.openWindow(url)
     }),
   )
 })
